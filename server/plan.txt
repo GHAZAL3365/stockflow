@@ -1,0 +1,18 @@
+STEP 1  → Project architecture + setup  - done
+STEP 2  → Backend + Express server - done
+STEP 3  → MongoDB connection  - done
+STEP 4  → User model + authentication
+STEP 5  → JWT middleware
+STEP 6  → Product model
+STEP 7  → Product CRUD APIs
+STEP 8  → Search/filter/sort/pagination
+STEP 9  → React + TypeScript setup
+STEP 10 → Login UI
+STEP 11 → Redux Toolkit
+STEP 12 → Protected routes
+STEP 13 → Product management UI
+STEP 14 → Create/Edit/Delete
+STEP 15 → Loading/error/empty states
+STEP 16 → Testing
+STEP 17 → Deployment
+STEP 18 → README + interview explanation
