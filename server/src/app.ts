@@ -1,4 +1,5 @@
 import express from "express";
+import authRoutes from "./routes/authRoutes";
 import cors from "cors";
 
 const app = express();
@@ -11,6 +12,8 @@ app.get("/api/health", (_req, res) => {
     success: true,
     message: "StockFlow API is running",
   });
+
+  app.use("/api/auth", authRoutes);
 });
 
 export default app;
