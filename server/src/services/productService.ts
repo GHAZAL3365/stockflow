@@ -23,11 +23,67 @@ export const createProduct = async (
 };
 
 
-export const getProducts = async (): Promise<IProduct[]> => {
-  const products = await Product.find()
-    .sort({ createdAt: -1 });
+export const getProducts = async (
+  page: number = 1,
+  limit: number = 10,
+  search?: string,
+  category?: string,
+  status?: string,
+  sort: string = "createdAt",
+  order: "asc" | "desc" = "desc"
+) => {
+  const filter: Record<string, any> = {};
 
-  return products;
+  // Search by product name or SKU
+  if (search) {
+    filter.$or = [
+      {
+        name: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        sku: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+    ];
+  }
+
+  // Filter by category
+  if (category) {
+    filter.category = category;
+  }
+
+  // Filter by status
+  if (status) {
+    filter.status = status;
+  }
+
+  // Calculate how many records to skip
+  const skip = (page - 1) * limit;
+
+  // Convert order into MongoDB sort value
+  const sortOrder = order === "asc" ? 1 : -1;
+
+  const [products, total] = await Promise.all([
+    Product.find(filter)
+      .sort({ [sort]: sortOrder })
+      .skip(skip)
+      .limit(limit),
+
+    Product.countDocuments(filter),
+  ]);
+
+  return {
+    products,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
 export const getProductById = async (
