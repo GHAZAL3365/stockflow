@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../middlewares/authMiddleware";
-import { createProduct, getProducts } from "../services/productService";
+import { createProduct, getProducts, getProductById, updateProduct, deleteProduct } from "../services/productService";
 
 export const createProductController = async (
   req: AuthRequest,
@@ -69,6 +69,104 @@ export const getProductsController = async (
     res.status(500).json({
       success: false,
       message: "Failed to fetch products",
+    });
+  }
+};
+
+export const getProductByIdController = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const product = await getProductById(id as string);
+
+    if (!product) {
+      res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (error) {
+    console.error("Get product error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch product",
+    });
+  }
+};
+export const updateProductController = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const product = await updateProduct(id as string, req.body);
+
+    if (!product) {
+      res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: product,
+    });
+  } catch (error) {
+    console.error("Update product error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to update product",
+    });
+  }
+};
+export const deleteProductController = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    if (typeof id !== "string") {
+
+    }
+
+    const product = await deleteProduct(id as string);
+
+    if (!product) {
+      res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete product error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete product",
     });
   }
 };

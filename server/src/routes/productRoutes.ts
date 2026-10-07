@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProductController, getProductsController } from "../controllers/productController";
+import { createProductController, getProductsController, getProductByIdController, updateProductController, deleteProductController } from "../controllers/productController";
 import { authenticateToken } from "../middlewares/authMiddleware";
 const router = Router();
 
@@ -14,5 +14,23 @@ router.get(
   authenticateToken,
   getProductsController
 );
+
+router.get(
+  "/:id",
+  authenticateToken,
+  getProductByIdController
+);
+router.put(
+  "/:id",
+  authenticateToken,
+  updateProductController
+);
+router.delete(
+  "/:id",
+  authenticateToken,
+  deleteProductController
+);
+
+
 
 export default router;
